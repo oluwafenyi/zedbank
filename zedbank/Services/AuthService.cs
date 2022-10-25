@@ -61,8 +61,8 @@ public static class AuthService
     public static async Task<User> GetAuthUser(ClaimsPrincipal principal, Context context)
     {
         var sub = principal.FindFirst(JwtRegisteredClaimNames.Sub)!;
-        // var user = await context.Users.FindAsync(long.Parse(sub.Value));
-        var user = await context.Users.Include(u => u.Wallets).Where(u => u.Id == long.Parse(sub.Value)).FirstAsync();
+        var user = await context.Users.Include(u => u.Wallets)
+            .Where(u => u.Id == long.Parse(sub.Value)).FirstAsync();
         return user!;
     }
 }

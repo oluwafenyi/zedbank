@@ -8,4 +8,11 @@ public class ConfigurationHelper
     {
         Config = configuration;
     }
+
+    public static void InitializeTestConfig()
+    {
+        Config = new ConfigurationManager();
+        Config["Jwt:Issuer"] = "http://localhost:8000";
+        Config["Jwt:Key"] = "zedbank-test-key";
+    }
 }

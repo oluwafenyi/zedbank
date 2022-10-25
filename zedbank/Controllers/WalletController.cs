@@ -38,7 +38,7 @@ namespace zedbank.Controllers
             var user = await AuthService.GetAuthUser(User, _context);
             if (wallet.OwnerId != user.Id)
             {
-                return Unauthorized(new { Detail = "you are not authorized to make this request" });
+                return StatusCode(403, new { Detail = "you are not authorized to make this request" });
             }
             
             var validator = new WalletTransactionValidator();
@@ -74,7 +74,7 @@ namespace zedbank.Controllers
             var user = await AuthService.GetAuthUser(User, _context);
             if (wallet.OwnerId != user.Id)
             {
-                return Unauthorized(new { Detail = "you are not authorized to make this request" });
+                return StatusCode(403, new { Detail = "you are not authorized to make this request" });
             }
             
             var validator = new WalletTransactionValidator();
@@ -114,7 +114,7 @@ namespace zedbank.Controllers
             var user = await AuthService.GetAuthUser(User, _context);
             if (wallet.OwnerId != user.Id)
             {
-                return Unauthorized(new { Detail = "you are not authorized to make this request" });
+                return StatusCode(403, new { Detail = "you are not authorized to make this request" });
             }
 
             var transactions = await WalletService.GetWalletTransactions(wallet, _context);

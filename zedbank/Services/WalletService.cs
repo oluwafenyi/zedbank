@@ -11,6 +11,8 @@ namespace zedbank.Services;
 
 public static class WalletService
 {
+    public static bool TestMode = false;
+    
     public static async Task<Wallet?> GetWallet(long id, Context context)
     {
         return await context.Wallets.FindAsync(id);
@@ -21,8 +23,11 @@ public static class WalletService
         await using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
         try
         {
-            await context.Database.ExecuteSqlRawAsync(
-                $"SELECT 1 FROM wallets WITH (UPDLOCK) WHERE Id = {wallet.Id}");
+            if (!TestMode)
+            {
+                await context.Database.ExecuteSqlRawAsync(
+                    $"SELECT 1 FROM wallets WITH (UPDLOCK) WHERE Id = {wallet.Id}");  
+            }
             var w = await context.Wallets.FindAsync(wallet.Id);
             if (w == null)
             {
@@ -48,7 +53,7 @@ public static class WalletService
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             await transaction.RollbackAsync();
             throw new TransactionException();
@@ -60,8 +65,11 @@ public static class WalletService
         await using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
         try
         {
-            await context.Database.ExecuteSqlRawAsync(
-                $"SELECT 1 FROM wallets WITH (UPDLOCK) WHERE Id = {wallet.Id}");
+            if (!TestMode)
+            {
+                await context.Database.ExecuteSqlRawAsync(
+                    $"SELECT 1 FROM wallets WITH (UPDLOCK) WHERE Id = {wallet.Id}");
+            }
             var w = await context.Wallets.FindAsync(wallet.Id);
             if (w == null)
             {

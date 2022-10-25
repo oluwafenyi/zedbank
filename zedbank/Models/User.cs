@@ -48,11 +48,16 @@ public class User
 
 public class UserRegistrationDto
 {
-    public string Email { get; }
-    public string FirstName { get; }
-    public string LastName { get;  }
-    public string Password { get; }
-    public string ConfirmPassword { get; }
+    public string Email { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public string ConfirmPassword { get; set; } = null!;
+
+    public UserRegistrationDto()
+    {
+        
+    }
     
     public UserRegistrationDto(string email, string firstName, string lastName, string password, string confirmPassword)
     {
