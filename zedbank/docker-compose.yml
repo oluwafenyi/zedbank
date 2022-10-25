@@ -1,0 +1,34 @@
+version: "3.2"
+services: 
+  server:
+    build:
+      context: .
+      dockerfile: compose/local/server/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Development__Password=password
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+      - "ZEDBANK_ConnectionStrings:DATABASE_URL=Data Source=database; Initial Catalog=zedbank; User Id=sa; Password=\"strong(!)Password\"; TrustServerCertificate=true"
+    volumes:
+      - ./:/usr/app/src/
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+    ports:
+      - "8001:443"
+      - "8000:80"
+    depends_on:
+      - database
+  database:
+    build:
+      context: .
+      dockerfile: compose/local/database/Dockerfile
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "MSSQL_SA_PASSWORD=strong(!)Password"
+    ports:
+      - "1433:1433"
+    volumes:
+      - zedbank_localdb:/var/opt/mssql/
+volumes: 
+  zedbank_localdb:

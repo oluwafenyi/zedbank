@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zedbank", "zedbank/zedbank.csproj", "{6A774FD0-763C-4C65-A420-0BC3A13651F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zedbank.Test", "zedbank.Test\zedbank.Test.csproj", "{9F220CF7-4B9F-45F5-AA33-E133D6F1E08E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A774FD0-763C-4C65-A420-0BC3A13651F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A774FD0-763C-4C65-A420-0BC3A13651F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A774FD0-763C-4C65-A420-0BC3A13651F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A774FD0-763C-4C65-A420-0BC3A13651F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{135D8AD4-429F-4082-87F0-96854432828A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{135D8AD4-429F-4082-87F0-96854432828A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{135D8AD4-429F-4082-87F0-96854432828A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{135D8AD4-429F-4082-87F0-96854432828A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F220CF7-4B9F-45F5-AA33-E133D6F1E08E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F220CF7-4B9F-45F5-AA33-E133D6F1E08E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F220CF7-4B9F-45F5-AA33-E133D6F1E08E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F220CF7-4B9F-45F5-AA33-E133D6F1E08E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
