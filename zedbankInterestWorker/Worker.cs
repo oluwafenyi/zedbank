@@ -20,17 +20,11 @@ namespace zedbankInterestWorker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // while (!stoppingToken.IsCancellationRequested)
-            // {
+            // Register scheduled message
+            
             var schedulerEndpoint = await _bus.GetSendEndpoint(new Uri("queue:quartz"));
             await schedulerEndpoint.ScheduleRecurringSend(new Uri("queue:everyday-recurring-schedule"),
                 new EverydayRecurringSchedule(), new EverydayRecurringScheduleElapsed(), stoppingToken);
-            // }
-
-            // if (scheduledRecurringMessage != null)
-            // {
-            //     await _bus.CancelScheduledRecurringSend(scheduledRecurringMessage);
-            // }
         }
     }
 }

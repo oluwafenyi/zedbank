@@ -20,6 +20,17 @@ public static class WalletService
 
     public static async Task FundWallet(Wallet wallet, WalletTransactionDto data, Context context)
     {
+        await _fundWallet(wallet, data, TransactionClassification.Funding, context);
+    }
+
+    public static async Task FundWallet(Wallet wallet, WalletTransactionDto data,
+        TransactionClassification classification, Context context)
+    {
+        await _fundWallet(wallet, data, classification, context);
+    }
+
+    private static async Task _fundWallet(Wallet wallet, WalletTransactionDto data, TransactionClassification classification, Context context)
+    {
         await using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
         try
         {
@@ -37,12 +48,17 @@ public static class WalletService
             var oldBalance = w.Balance;
             var amount = decimal.Parse(data.Amount);
             w.Balance = w.Balance + amount;
+            if (classification == TransactionClassification.SimpleInterestCredit)
+            {
+                var startOfDay = Utils.GetStartOfDay(DateTimeOffset.Now);
+                w.LastInterestCredit = startOfDay;
+            }
             await context.SaveChangesAsync();
 
             var t = new Transaction
             {
                 Reference = Transaction.GenerateReference(),
-                Description = "fund",
+                Classification = classification,
                 Type = TransactionType.Credit,
                 Status = TransactionStatus.Successful,
                 HistoricalBalance = oldBalance,
@@ -89,7 +105,7 @@ public static class WalletService
             var t = new Transaction
             {
                 Reference = Transaction.GenerateReference(),
-                Description = "withdraw",
+                Classification = TransactionClassification.Withdrawal,
                 Type = TransactionType.Debit,
                 Status = TransactionStatus.Successful,
                 HistoricalBalance = oldBalance,

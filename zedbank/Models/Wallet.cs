@@ -14,6 +14,7 @@ public class Wallet
     public decimal Balance { get; set; }
     
     public CurrencyType Currency { get; set; }
+    public DateTimeOffset? LastInterestCredit { get; set; }
     public long OwnerId { get; set; }
     
     [Required]

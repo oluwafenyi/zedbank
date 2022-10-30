@@ -12,7 +12,7 @@ public class Transaction
 
     public string Reference { get; init; } = null!;
     
-    public string Description { get; set; } = null!;
+    public TransactionClassification Classification { get; set; }
     public TransactionType Type { get; set; }
     public TransactionStatus Status { get; set; }
     
@@ -22,7 +22,7 @@ public class Transaction
     [Precision(19, 4)]
     public decimal Amount { get; set; }
     
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
     public long WalletId { get; set; }
     
     public Wallet? Wallet { get; set; }
@@ -46,18 +46,18 @@ public class TransactionDto
 {
     public long Id { get; set; }
     public string Reference { get; set; }
-    public string Description { get; set; }
+    public string Classification { get; set; }
     public string Type { get; set; }
     public string Status { get; set; }
     public string HistoricalBalance { get; set; }
     public string Amount { get; set; }
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
 
     public TransactionDto(Transaction transaction)
     {
         Id = transaction.Id;
         Reference = transaction.Reference;
-        Description = transaction.Description;
+        Classification = transaction.Classification.ToDescriptionString();
         Type = transaction.Type.ToString();
         Status = transaction.Status.ToString();
         HistoricalBalance = transaction.HistoricalBalance.ToString("0.00");

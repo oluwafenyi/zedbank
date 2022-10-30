@@ -19,8 +19,14 @@ public static class UserService
             context.Users.Add(user);
             await context.SaveChangesAsync();
 
-            var nairaWallet = new Wallet(CurrencyType.Ngn, user.Id);
-            var usdWallet = new Wallet(CurrencyType.Usd, user.Id);
+            var nairaWallet = new Wallet(CurrencyType.Ngn, user.Id)
+            {
+                LastInterestCredit = Utils.GetStartOfDay(DateTimeOffset.Now)
+            };
+            var usdWallet = new Wallet(CurrencyType.Usd, user.Id)
+            {
+                LastInterestCredit = Utils.GetStartOfDay(DateTimeOffset.Now)
+            };
             context.Wallets.Add(nairaWallet);
             context.Wallets.Add(usdWallet);
             await context.SaveChangesAsync();

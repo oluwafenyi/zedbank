@@ -35,6 +35,7 @@ namespace zedbank.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Balance = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
                     Currency = table.Column<int>(type: "int", nullable: false),
+                    LastInterestCredit = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     OwnerId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -55,12 +56,12 @@ namespace zedbank.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Reference = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Classification = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     HistoricalBalance = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "getdate()"),
                     WalletId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>

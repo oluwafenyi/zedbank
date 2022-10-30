@@ -10,8 +10,6 @@ namespace zedbankInterestWorker
 {
     public class Program
     {
-        public static readonly Uri SchedulerEndpoint = new Uri("queue:scheduler");
-        
         public static async Task Main(string[] args)
         {
             await CreateHostBuilder(args).Build().RunAsync();
@@ -21,6 +19,11 @@ namespace zedbankInterestWorker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddQuartz(q =>
+                    {
+                        q.UseMicrosoftDependencyInjectionJobFactory();
+                    });
+                    
                     services.AddMassTransit(x =>
                     {
                         x.SetKebabCaseEndpointNameFormatter();
@@ -31,21 +34,24 @@ namespace zedbankInterestWorker
 
                         var entryAssembly = Assembly.GetEntryAssembly();
 
-                        x.AddMessageScheduler(SchedulerEndpoint);
+                        x.AddPublishMessageScheduler();
+                        x.AddQuartzConsumers();
 
                         x.AddConsumers(entryAssembly);
                         x.AddSagaStateMachines(entryAssembly);
                         x.AddSagas(entryAssembly);
                         x.AddActivities(entryAssembly);
 
-                        x.UsingRabbitMq((context, cfg) => { 
-                            // cfg.Host("localhost", "/", h =>
-                            // {
-                            //     h.Username("guest");
-                            //     h.Password("guest");
-                            // });
+                        x.UsingRabbitMq((context, cfg) =>
+                        {
+                            var config = ConfigurationManager.Config;
+                            cfg.Host(config["RabbitMq:HOST"], "/", h =>
+                            {
+                                h.Username(config["RabbitMq:USERNAME"]);
+                                h.Password(config["RabbitMq:PASSWORD"]);
+                            });
                             
-                            cfg.UseInMemoryScheduler("scheduler");
+                            cfg.UsePublishMessageScheduler();
                             cfg.ConfigureEndpoints(context);
                         });
                     });

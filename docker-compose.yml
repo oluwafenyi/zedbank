@@ -1,0 +1,51 @@
+version: "3.2"
+services: 
+  server:
+    build:
+      context: ./zedbank/
+      dockerfile: compose/local/server/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Development__Password=password
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+      - "ZEDBANK_ConnectionStrings:DATABASE_URL=Data Source=database; Initial Catalog=zedbank; User Id=sa; Password=h8t7-X9IAO; TrustServerCertificate=true"
+    volumes:
+      - ./zedbank/:/usr/app/src/
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+    ports:
+      - "8001:443"
+      - "8000:80"
+    depends_on:
+      - database
+  worker:
+    build:
+      context: .
+      dockerfile: compose/local/worker/Dockerfile
+    environment:
+      - "ZEDBANK_ConnectionStrings:DATABASE_URL=Data Source=database; Initial Catalog=zedbank; User Id=sa; Password=h8t7-X9IAO; TrustServerCertificate=true"
+      - "ZEDBANK_RabbitMq:HOST=rabbit"
+      - "ZEDBANK_RabbitMq:USERNAME=guest"
+      - "ZEDBANK_RabbitMq:PASSWORD=guest"
+    depends_on:
+      - database
+      - rabbit
+  database:
+    build:
+      context: .
+      dockerfile: compose/local/database/Dockerfile
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "MSSQL_SA_PASSWORD=h8t7-X9IAO"
+    ports:
+      - "1433:1433"
+    volumes:
+      - zedbank_localdb:/var/opt/mssql
+  rabbit:
+    image: "masstransit/rabbitmq:latest"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+volumes: 
+  zedbank_localdb:

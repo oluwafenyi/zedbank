@@ -1,5 +1,4 @@
 using MassTransit.Scheduling;
-using Quartz;
 
 namespace zedbankInterestWorker.Schedule
 {
@@ -7,7 +6,8 @@ namespace zedbankInterestWorker.Schedule
     {
         public EverydayRecurringSchedule()
         {
-            CronExpression = "*/10 * * * * ?";
+            // CronExpression = "0 0/1 * 1/1 * ? *";  // Every minute: for testing
+            CronExpression = "0 0 0 * * ? *";  // Every day by 12:00am
         }
     }
 }

@@ -12,7 +12,7 @@ using zedbank.Database;
 namespace zedbank.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20221025181035_InitialCreate")]
+    [Migration("20221030090449_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,14 +37,13 @@ namespace zedbank.Migrations
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
 
-                    b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                    b.Property<int>("Classification")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<decimal>("HistoricalBalance")
                         .HasPrecision(19, 4)
@@ -117,6 +116,9 @@ namespace zedbank.Migrations
 
                     b.Property<int>("Currency")
                         .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("LastInterestCredit")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<long>("OwnerId")
                         .HasColumnType("bigint");

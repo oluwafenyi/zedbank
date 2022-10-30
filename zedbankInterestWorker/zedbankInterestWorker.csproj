@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="MassTransit" Version="8.0.7" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\zedbank\zedbank.csproj" />
+  </ItemGroup>
 </Project>

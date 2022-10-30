@@ -2,6 +2,7 @@ namespace zedbankInterestWorker.Contracts
 {
     public record ZedbankInterestWorker
     {
-        public string Value { get; init; }
+        public decimal Balance { get; init; }
+        public long WalletId { get; init; }
     }
 }

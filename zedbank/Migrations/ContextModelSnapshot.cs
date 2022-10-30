@@ -34,14 +34,13 @@ namespace zedbank.Migrations
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
 
-                    b.Property<DateTime>("Created")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                    b.Property<int>("Classification")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<decimal>("HistoricalBalance")
                         .HasPrecision(19, 4)
@@ -114,6 +113,9 @@ namespace zedbank.Migrations
 
                     b.Property<int>("Currency")
                         .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("LastInterestCredit")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<long>("OwnerId")
                         .HasColumnType("bigint");
