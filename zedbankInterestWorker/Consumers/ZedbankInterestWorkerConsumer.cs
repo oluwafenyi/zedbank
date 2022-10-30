@@ -23,14 +23,7 @@ namespace zedbankInterestWorker.Consumers
         {
             _logger.LogInformation("Received Interest Task");
             var interestAmount = context.Message.Balance * _interestRate;
-            var wallet = await Database.Context.Wallets.FindAsync(context.Message.WalletId);
-            if (wallet == null)
-            {
-                _logger.LogWarning("Could not find the wallet with Id: {wId}", context.Message.WalletId);
-                return;
-            }
-            
-            await WalletService.FundWallet(wallet, new WalletTransactionDto(interestAmount.ToString("0.00")),
+            await WalletService.FundWallet(context.Message.WalletId, new WalletTransactionDto(interestAmount.ToString("0.00")),
                 TransactionClassification.SimpleInterestCredit, Database.Context);
             _logger.LogInformation("Successfully applied interest to wallet with Id: {wId}", context.Message.WalletId);
         }

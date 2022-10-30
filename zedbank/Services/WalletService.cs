@@ -17,29 +17,39 @@ public static class WalletService
     {
         return await context.Wallets.FindAsync(id);
     }
+    
+    public static async Task FundWallet(long walletId, WalletTransactionDto data, 
+        TransactionClassification classification, Context context)
+    {
+        await _fundWallet(null, data, classification, context, walletId);
+    }
 
     public static async Task FundWallet(Wallet wallet, WalletTransactionDto data, Context context)
     {
-        await _fundWallet(wallet, data, TransactionClassification.Funding, context);
+        await _fundWallet(wallet, data, TransactionClassification.Funding, context, 0);
     }
 
     public static async Task FundWallet(Wallet wallet, WalletTransactionDto data,
         TransactionClassification classification, Context context)
     {
-        await _fundWallet(wallet, data, classification, context);
+        await _fundWallet(wallet, data, classification, context, 0);
     }
 
-    private static async Task _fundWallet(Wallet wallet, WalletTransactionDto data, TransactionClassification classification, Context context)
+    private static async Task _fundWallet(Wallet? wallet, WalletTransactionDto data, TransactionClassification classification, Context context, long walletId)
     {
+        if (walletId == 0)
+        {
+            walletId = wallet!.Id;
+        }
         await using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
         try
         {
             if (!TestMode)
             {
                 await context.Database.ExecuteSqlRawAsync(
-                    $"SELECT 1 FROM wallets WITH (UPDLOCK) WHERE Id = {wallet.Id}");  
+                    $"SELECT 1 FROM wallets WITH (UPDLOCK) WHERE Id = {walletId}");  
             }
-            var w = await context.Wallets.FindAsync(wallet.Id);
+            var w = await context.Wallets.FindAsync(walletId);
             if (w == null)
             {
                 throw new Exception();
@@ -63,7 +73,7 @@ public static class WalletService
                 Status = TransactionStatus.Successful,
                 HistoricalBalance = oldBalance,
                 Amount = amount,
-                WalletId = wallet.Id,
+                WalletId = walletId,
             };
             context.Transactions.Add(t);
             await context.SaveChangesAsync();
